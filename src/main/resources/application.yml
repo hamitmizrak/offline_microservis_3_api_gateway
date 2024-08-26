@@ -1,0 +1,37 @@
+# port
+#server.port= 8080
+server:
+  port: 8080
+
+# application.properties
+# spring.application.name=api_gateway
+# application.yml
+
+# NOT: product-service bu servis adıdır. spring.application.name=product-service
+spring:
+  application:
+    name: api_gateway
+  cloud: # Spring Cloud Gateway istekleri yönlendirmek içindir
+    gateway:
+      routes: # Birden fazla yönlendirme içindir
+        # product-service olan rota için /products/** ile başlayan
+        # tüm istekleri PRODUCT-SERVICE adlı mikroservice yönlendirecektir
+        - id: product-service # Bu rota için benzersiz bir kimlik (ID) tanımladık
+          # uri: isteklerin nereye yönlendirileceğini belirtir. lb: loadn balancing ön ekiyle başlar
+          # ve sonrasında hedef servis adı gelir
+          uri: lb://PRODUCT-SERVICE
+          # predicates: Rota üzerinde hangi isteklerin yönlendirileceğini belirler
+          # predicates: Belirli koşullara uyan istekleri yakalar
+          predicates:
+            - Path=/products/** # Spring Cloud Gateway /products/ ile başlayan tüm istekleri PRODUCT-SERVICE yönlendirir.
+
+        - id: order-service
+          uri: lb://ORDER-SERVICE
+          predicates:
+            - Path=/orders/**
+
+# default Eureka URL
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
