@@ -35,3 +35,7 @@ eureka:
   client:
     service-url:
       defaultZone: http://localhost:8761/eureka/
+
+
+# Günlük seviyesini artırarak hata ayıklama için daha fazla bilgi alabilirsiniz
+  #  logging.level.org.springframework.cloud=DEBUG
